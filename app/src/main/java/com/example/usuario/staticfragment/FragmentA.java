@@ -1,6 +1,7 @@
 package com.example.usuario.staticfragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,11 +14,15 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 
 /**
- * Created by usuario on 16/11/17.
+ * Clase Fragment que implementa cuadro de texto,
+ * barra de desplazamiento y botón para girar la pantalla y adaptarla
+ *
+ * @author Enrique Casielles Lapeira
+ * @version 1.0
+ * @see android.app.Fragment
  */
-
 public class FragmentA extends Fragment {
-
+    //Interfaz para poder capturar la excepción
     private FragmentAListener mCallBack;
     private EditText edtMessage;
     private Button btnSize;
@@ -27,13 +32,15 @@ public class FragmentA extends Fragment {
      * Se define la inerfaz que servirá de contrato entre el Fragment y la Activity
      **/
     public interface FragmentAListener {
-        void onFragmentAEvent(String mensaje, int size);
+        void onFragmentChangedListener(String mensaje, int size);
     }
-
-
+    /**
+     * Obsoleto desde API 23
+     * @param activity Actividad padre del fragment
+     */
     @Override
     public void onAttach(Activity activity) {
-        Log.d("FragmentA", "onAttach()");
+        Log.d("FragmentA", "onAttach(activity)");
         super.onAttach(activity);
         try {
             mCallBack = (FragmentAListener) activity;
@@ -41,24 +48,27 @@ public class FragmentA extends Fragment {
             throw new ClassCastException(activity.toString() + " must implement FragmentAListener");
         }
     }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.d("FragmentA", "onCreate()");
-        super.onCreate(savedInstanceState);
-    }
-
+    public FragmentA() { }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d("FragmentA", "onCreateView()");
-        View view = inflater.inflate(R.layout.fragmenta, container, false);
-        edtMessage = view.findViewById(R.id.edtMessage);
-        btnSize = view.findViewById(R.id.btnSize);
-        skbSize = view.findViewById(R.id.skbSize);
-        return view;
+        //Por corrección implementa el superconstructor aunque no lo ponga el IDE.
+        super.onCreateView(inflater, container, savedInstanceState);
+        View rootView = inflater.inflate(R.layout.fragmenta, container, false);
+        if (rootView != null) {
+            edtMessage = (EditText) rootView.findViewById(R.id.edtMessage);
+            skbSize = (SeekBar) rootView.findViewById(R.id.skbSize);
+            btnSize = (Button) rootView.findViewById(R.id.btnSize);
+            btnSize.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mCallBack.onFragmentChangedListener(edtMessage.getText().toString(), skbSize.getProgress());
+                }
+            });
+        }
+        return rootView;
     }
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         Log.d("FragmentA", "onViewCreated()");
@@ -66,7 +76,7 @@ public class FragmentA extends Fragment {
         btnSize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCallBack.onFragmentAEvent(edtMessage.getText().toString(), skbSize.getProgress());
+                mCallBack.onFragmentChangedListener(edtMessage.getText().toString(), skbSize.getProgress());
             }
         });
     }
@@ -74,11 +84,11 @@ public class FragmentA extends Fragment {
     /**
      * Este método solo funciona desde la API 23 en adelante.
      * Si se ejecuta en una API inferior NO DA ERROR PERO NO FUNCIONA LA COMUNICACIÓN Activity-Fragment
-
-     @Override public void onAttach(Context context) {
-     super.onAttach(context);
-     }*/
-
+      * */
+    @Override public void onAttach(Context context) {
+        Log.d("FragmentA", "onAttach(context)");
+        super.onAttach(context);
+    }
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         Log.d("FragmentA", "onActivityCreated()");
