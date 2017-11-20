@@ -27,7 +27,9 @@ public class FragmentC extends Fragment {
         View rootView  = inflater.inflate(R.layout.fragmentc, container, false);
         if(rootView != null) {
             wvAbout = (WebView) rootView.findViewById(R.id.wvFrgCHtml);
-            wvAbout.loadData(getResources().getString(R.string.about), "text/html", "utf-8");
+            wvAbout.loadDataWithBaseURL(null,
+                    getResources().getString(R.string.about),
+                    "text/html", "utf-8", null);
         }
         return rootView;
     }

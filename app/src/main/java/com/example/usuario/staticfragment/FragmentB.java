@@ -19,7 +19,7 @@ import android.widget.TextView;
  * @see android.app.Fragment
  */
 public class FragmentB extends Fragment {
-    TextView txvFragmentB;
+    private TextView txvFragmentB;
 
     public FragmentB() { }
 

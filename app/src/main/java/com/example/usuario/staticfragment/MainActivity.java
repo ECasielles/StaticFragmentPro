@@ -13,21 +13,17 @@ import android.support.v7.app.AppCompatActivity;
  */
 public class MainActivity extends AppCompatActivity implements FragmentA.FragmentAListener{
 
-    //private FragmentA fragmentA;
     private FragmentB fragmentB;
-    //private FragmentC fragmentC;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //fragmentA = (FragmentA) getSupportFragmentManager().findFragmentById(R.id.fragmentA);
         fragmentB = (FragmentB) getSupportFragmentManager().findFragmentById(R.id.fragmentB);
-        //fragmentC = (FragmentC) getSupportFragmentManager().findFragmentById(R.id.fragmentC);
     }
 
     @Override
-    public void onFragmentChangedListener(String mensaje, int size) {
-        fragmentB.changeTextProperties(mensaje, size);
+    public void onFragmentAEvent(String mensaje, int size) {
+        ((FragmentB)fragmentB).changeTextProperties(mensaje, size);
     }
 }

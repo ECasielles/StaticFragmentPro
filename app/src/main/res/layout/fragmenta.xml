@@ -35,7 +35,7 @@
         android:id="@+id/btnSize"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Cambiar tamaño"
+        android:text="Cambiar tamaño"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/skbSize"
